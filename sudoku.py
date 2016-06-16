@@ -218,8 +218,10 @@ path = "D:\sudoku\\"
 df = pd.read_csv(path+'sudoku_input.csv')
 
 nbr_mtx = (len(df)+1)/10
-print nbr_mtx
+print "number of matrixes: ", nbr_mtx
 
+output_df = pd.DataFrame(columns=df.columns)
+blankline_df = pd.DataFrame([['','','','','','','','','']], columns=df.columns)
 for i in xrange(nbr_mtx):
 	sudoku = df[i*10:i*10+9]
 	sudoku = sudoku.as_matrix()
@@ -251,4 +253,10 @@ for i in xrange(nbr_mtx):
 
 	# # validation
 	print validation(sudoku) == True
+	sudoku_df = pd.DataFrame(sudoku, columns=df.columns)
 	# print sudoku
+	
+	output_df = pd.concat([output_df, sudoku_df], axis=0)
+	output_df = pd.concat([output_df, blankline_df], axis=0)
+
+output_df.to_csv(path+'sudoku_output.csv', index=False)
